@@ -22,10 +22,9 @@ This notebook investigates an unexpected efficiency dip at Lxy ~ 2.5 m. I tested
 - pandas
 - matplotlib
 - numpy
-## How to run
-pip install -r requirements.txt
-Then open the notebooks in order:
-1. 01_efficiency.ipynb
-2. 02_investigation_dip.ipynb
-
+## Note on data
+The ROOT input files used in this analysis are not included in this 
+repository as they are part of the ATLAS collaboration internal dataset. The code is provided for reference purposes only.
+## Dependencies
+pip install uproot awkward pandas matplotlib numpy
 
