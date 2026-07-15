@@ -28,3 +28,16 @@ repository as they are part of the ATLAS collaboration internal dataset. The cod
 ## Dependencies
 pip install uproot awkward pandas matplotlib numpy
 
+# ## Configuration files
+
+The `configs/` folder contains the YAML configuration files used to generate 
+the ROOT ntuples with TopCPToolkit:
+
+- `configs/particle.yaml` : particle level tree configuration
+- `configs/reco.yaml`     : reconstruction level tree configuration
+
+These files were used with the following command:
+
+```bash
+runTop_el.py -i local_inputs/ma15ctau100.txt -o outputFiles -p TopCalRatio/configs -t calRatio_merged --no-systematics --particle
+```
