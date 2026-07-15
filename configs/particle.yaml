@@ -1,0 +1,108 @@
+CommonServices:
+  systematicsHistogram: 'listOfSystematicsParticleLevel'
+  fixDAODTruthRecord: False
+
+GeneratorLevelAnalysis: {}
+
+PL_Electrons:
+  PtEtaSelection:
+    useDressedProperties: True
+    minPt: 27000.0
+    maxEta: 2.47
+
+PL_Muons:
+  PtEtaSelection:
+    useDressedProperties: True
+    minPt: 27000.0
+    maxEta: 2.47
+
+PL_Jets:
+  containerName: 'AntiKt4TruthDressedWZJets'
+  PtEtaSelection:
+     minPt: 25000.0
+     maxEta: 2.5
+    
+
+PL_MissingET: {}
+
+PL_OverlapRemoval:
+  electrons: TruthElectrons
+  muons: TruthMuons
+  jets: AntiKt4TruthDressedWZJets
+
+Thinning:
+  - containerName: 'TruthElectrons'
+    outputName: 'OutTruthElectrons'
+  - containerName: 'TruthMuons'
+    outputName: 'OutTruthMuons'
+  - containerName: 'AntiKt4TruthDressedWZJets'
+    outputName: 'OutTruthJets'
+
+# EventSelection:
+#   - electrons: 'TruthElectrons'
+#     muons: 'TruthMuons'
+#     jets: 'AntiKt4TruthDressedWZJets'
+#     met: 'TruthMET'
+#     metTerm: 'NonInt'
+#     noFilter: False
+#     cutFlowHistograms: True
+#     selectionCutsDict:
+#       'charmingALP_ttbar_ALP_semilep': |
+#         SUM_EL_N_MU_N tight tight 27000 25000 == 1
+#         MET >= 30000
+#         MET+MWT >= 50000
+#         JET_N 25000 >= 3
+#         SAVE
+
+
+TruthTopCalRatio:
+  # Note: we label this list as truthTopCalRatioDSIDs to use it later again when declaring the output containers (avoids duplication)
+  - runOnlyForDSIDs: &truthTopCalRatioDSIDs [562144, 562145, 562146, 562147, 562148, 562149, 562150, 562151, 562152, 562153, 562154, 562155,      # charming ALP semilep-ttbar
+                      537840, 537843, 537845, 537848, 537849, 537850, 571249, 571250, 571251, 571252, 571253, 571254,571255,571256,571257,571258, # Hss High Mass
+                      410470, 410471, 410472, # ttbar (note Annika: these look like mc20, not mc23)
+                      410644, 410645, 410646, 410647, 410658, # single top (note Annika: same)
+                      601229, 601230, 601237, 601589, # ttbar singlelep, dilep, allhad, nonallhad (from LUP bulk production)
+                      601348, 601349, 601350, 601351, 601352, 601355 # single top tb/tqb/tW - anti/top (same)
+                      ]
+
+
+# After configuring each container, many variables will be saved automatically.
+Output:
+  treeName: 'particleLevel'
+  vars:
+    - 'EventInfo.mcChannelNumber -> mcChannelNumber'
+    - 'EventInfo.runNumber -> runNumber'
+    - 'EventInfo.eventNumber -> eventNumber'
+  metVars: []
+  metTermName: 'NonInt'
+  containers:
+      # Here we just declare the prefix for each container
+      'PL_': 'EventInfo'
+      'PL_el_': 'OutTruthElectrons'
+      'PL_mu_': 'OutTruthMuons'
+      'PL_jet_': 'OutTruthJets'
+      'PL_met_': 'TruthMET'
+      'truth_alp_': 'ParticleLevelALPs'
+      'truth_ch_': 'ParticleLevelALPsChildren'
+      'truth_top_': 'ParticleLevelTops'
+      'truth_bottom_': 'ParticleLevelBottoms'
+      'truth_WbosonWithDecayParticles_': 'ParticleLevelWbosonsWithDecayParticles'
+      'truth_exotDecayParticles_': 'ParticleLevelExotDecayProducts'
+  containersOnlyForDSIDs:
+      # Note: the truthTopCalRatioDSIDs from above are exactly those for which this specific algorithm ran,
+      # only for those, we can write out the containers
+      # ToDo: revisit this for different signatures
+      # and make sure to only store what is needed (for BG MC no alps)
+      truth_alp_: *truthTopCalRatioDSIDs
+      truth_ch_: *truthTopCalRatioDSIDs
+      truth_top_: *truthTopCalRatioDSIDs
+      truth_bottom_: *truthTopCalRatioDSIDs
+      truth_WbosonWithDecayParticles_: *truthTopCalRatioDSIDs
+      truth_exotDecayParticles_: *truthTopCalRatioDSIDs
+
+
+AddConfigBlocks:
+    - modulePath: 'TopCalRatio.TruthTopCalRatioConfig'
+      functionName: 'TruthTopCalRatioConfig'
+      algName: 'TruthTopCalRatio'
+      pos: 'Output'
