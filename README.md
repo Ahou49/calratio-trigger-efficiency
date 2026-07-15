@@ -1,4 +1,4 @@
-# calratio Trigger Efficiency Analysis 
+# Calratio Trigger Efficiency Analysis 
 ## About 
 This repository contains the code I wrote during my M2 internship at LPCA (Laboratoire de Physique de Clermont Auvergne), Université Clermont 
 Auvergne, 2026.
