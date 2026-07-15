@@ -1,1 +1,12 @@
+# Configuration files
 
+The `configs/` folder contains the YAML configuration files used to generate 
+the ROOT ntuples with TopCPToolkit:
+
+- `configs/particle.yaml` : particle level tree configuration
+- `configs/reco.yaml`     : reconstruction level tree configuration
+
+These files were used with the following command:
+
+```bash
+runTop_el.py -i local_inputs/ma15ctau100.txt -o ~/ntupleFW/outputFiles -p TopCalRatio/configs -t calRatio_merged -e 1000000 --no-systematics --particle | tee ~/ntupleFW/outputFiles/mc_output.log
